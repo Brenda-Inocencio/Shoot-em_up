@@ -7,7 +7,7 @@ void Up::Moving(Ship& ship) {
 }
 
 void Up::Moving(Shoot& shoot) {
-	shoot.pos_y -= 10;
+	shoot.pos_y -= 20;
 }
 
 void Right::Moving(Ship& ship) {

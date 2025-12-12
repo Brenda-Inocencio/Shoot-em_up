@@ -9,11 +9,13 @@
 #include "move.h"
 #include "niveau.h"
 
-void Update(float timePrev, SDL_Renderer* renderer, Ship& ship, Shoot& shoot, Up up) {
+void Update(float timePrev, SDL_Renderer* renderer, Ship& ship, Shoot shoot, Up up, bool isShoot) {
     if (timePrev >= 1.0f / 60.0f) {
         ship.Render(renderer);
-        shoot.Render(renderer);
-        up.Moving(shoot);
+        if (isShoot) {
+            shoot.Render(renderer);
+            up.Moving(shoot);
+        }
     }
 }
 
@@ -42,7 +44,7 @@ int main(int argc, char** argv)
     Button* exit = new Exit(renderer);
     Button* start = new Start(renderer);
     Ship ship(renderer);
-    Shoot shoot(renderer);
+    Shoot shoot(renderer, ship);
     Up up;
     Down down;
     Right right;
@@ -50,6 +52,7 @@ int main(int argc, char** argv)
     Background bg(renderer);
 
     bool gameStart = false;
+    bool isShoot = false;
     bool keepGoing = true;
     float timePrev = 0;
     while (keepGoing) {
@@ -90,6 +93,10 @@ int main(int argc, char** argv)
                 if (event.key.key == SDLK_S) {
                     down.Moving(ship);
                 }
+                if (event.key.key == SDLK_SPACE) {
+                    isShoot = true;
+                    shoot.CreateShoot(renderer, ship);
+                }
             }
         }
         int window_w, window_h;
@@ -101,7 +108,7 @@ int main(int argc, char** argv)
             float now = SDL_GetTicks();
             float dt = now - timePrev;
             timePrev = now;
-            Update(timePrev, renderer, ship, shoot, up);
+            Update(timePrev, renderer, ship, shoot, up, isShoot);
         }
         else {
             exit->Render(renderer);
