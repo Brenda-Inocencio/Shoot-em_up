@@ -15,7 +15,7 @@ Ship::Ship(SDL_Renderer* _renderer) {
 
 void Ship::Render(SDL_Renderer* _renderer) {
 	if (m_ship) {
-		SDL_FRect rect = { pos_x, pos_y, 80, 80 };
+		SDL_FRect rect = {pos_x, pos_y, 80, 80};
 		SDL_RenderTexture(_renderer, m_ship, nullptr, &rect);
 	}
 }
