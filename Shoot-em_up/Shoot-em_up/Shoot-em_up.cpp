@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
+#include <vector>
 #include "ship.h"
 #include "shoot.h"
 #include "background.h"
@@ -9,25 +10,41 @@
 #include "move.h"
 #include "niveau.h"
 
-void Update(float timePrev, SDL_Renderer* renderer, Ship& ship, Shoot shoot, Up up, bool isShoot) {
-    if (timePrev >= 1.0f / 60.0f) {
-        ship.Render(renderer);
+void GameRenderer(SDL_Renderer* renderer, Ship& ship, std::vector<Shoot> shoots, bool isShoot) {
+    ship.Render(renderer);
+    for (int i = 0; i < shoots.size(); i++) {
         if (isShoot) {
-            shoot.Render(renderer);
-            up.Moving(shoot);
+            shoots[i].Render(renderer);
         }
     }
 }
 
-int main(int argc, char** argv)
-{
+void Update(float dt, SDL_Renderer* renderer, Ship& ship, std::vector<Shoot> shoots, Up up, Right right, Left left, Down down, bool isShoot, bool isUp, bool isRight, bool isLeft, bool isDown) {
+    for (int i = 0; i < shoots.size(); i++) {
+        up.Moving(shoots[i], dt);
+    }
+    if (isUp) {
+        up.Moving(ship, dt);
+    }
+    if (isRight) {
+        right.Moving(ship, dt);
+    }
+    if (isLeft) {
+        left.Moving(ship, dt);
+    }
+    if (isDown) {
+        down.Moving(ship, dt);
+    }
+}
+
+int main(int argc, char** argv) {
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_SetAppMetadata("SDL Test", "1.0", "games.anakata.test-sdl");
     if (!SDL_Init(SDL_INIT_VIDEO))
         return 1;
 
-    if (!SDL_CreateWindowAndRenderer("Shoot'em up", 1024, 768, SDL_WINDOW_RESIZABLE,
+    if (!SDL_CreateWindowAndRenderer("Shoot'em up", 1024, 768, 0,
         &window, &renderer))
         return 1;
 
@@ -44,18 +61,26 @@ int main(int argc, char** argv)
     Button* exit = new Exit(renderer);
     Button* start = new Start(renderer);
     Ship ship(renderer);
-    Shoot shoot(renderer, ship);
+    std::vector<Shoot> shoots;
     Up up;
     Down down;
     Right right;
     Left left;
     Background bg(renderer);
 
+    bool isUp = false;
+    bool isRight = false;
+    bool isLeft = false;
+    bool isDown = false;
     bool gameStart = false;
     bool isShoot = false;
     bool keepGoing = true;
     float timePrev = 0;
     while (keepGoing) {
+        float now = float(SDL_GetTicks()) / 1000.0f;
+        float dt = now - timePrev;
+        timePrev = now;
+
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT)
@@ -82,20 +107,35 @@ int main(int argc, char** argv)
             }
             if (event.type == SDL_EVENT_KEY_DOWN) {
                 if (event.key.key == SDLK_Z) {
-                    up.Moving(ship);
+                    isUp = true;
                 }
                 if (event.key.key == SDLK_D) {
-                    right.Moving(ship);
+                    isRight = true;
                 }
                 if (event.key.key == SDLK_Q) {
-                    left.Moving(ship);
+                    isLeft = true;
                 }
                 if (event.key.key == SDLK_S) {
-                    down.Moving(ship);
+                    isDown = true;
                 }
                 if (event.key.key == SDLK_SPACE) {
                     isShoot = true;
-                    shoot.CreateShoot(renderer, ship);
+                    Shoot shoot(renderer, ship);
+                    shoots.push_back(shoot);
+                }
+            }
+            if (event.type == SDL_EVENT_KEY_UP) {
+                if (event.key.key == SDLK_Z) {
+                    isUp = false; 
+                }
+                if (event.key.key == SDLK_D) {
+                    isRight = false;
+                }
+                if (event.key.key == SDLK_Q) {
+                    isLeft = false;
+                }
+                if (event.key.key == SDLK_S) {
+                    isDown = false;
                 }
             }
         }
@@ -105,10 +145,8 @@ int main(int argc, char** argv)
         bg.Render(renderer, window_w, window_h);
 
         if (gameStart) {
-            float now = SDL_GetTicks();
-            float dt = now - timePrev;
-            timePrev = now;
-            Update(timePrev, renderer, ship, shoot, up, isShoot);
+            Update(dt, renderer, ship, shoots, up, right, left, down, isShoot, isUp, isRight, isLeft, isDown);
+            GameRenderer(renderer, ship, shoots, isShoot);
         }
         else {
             exit->Render(renderer);
