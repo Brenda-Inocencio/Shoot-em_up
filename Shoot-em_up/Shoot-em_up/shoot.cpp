@@ -14,7 +14,7 @@ Shoot::Shoot(SDL_Renderer* _renderer, Ship& _ship) {
 
 void Shoot::Render(SDL_Renderer* _renderer) {
 	if (laser) {
-		SDL_FRect rect = {pos_x, pos_y - 10, 200, 200 };
+		SDL_FRect rect = {pos_x, pos_y, 200, 200 };
 		SDL_RenderTexture(_renderer, laser, nullptr, &rect);
 	}
 }

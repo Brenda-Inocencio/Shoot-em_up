@@ -10,16 +10,19 @@
 #include "move.h"
 #include "niveau.h"
 
-void GameRenderer(SDL_Renderer* renderer, Ship& ship, std::vector<Shoot> shoots, bool isShoot) {
+void MenuRenderer(SDL_Renderer* renderer, Button* exit, Button* start) {
+    exit->Render(renderer);
+    start->Render(renderer);
+}
+
+void GameRenderer(SDL_Renderer* renderer, Ship& ship, std::vector<Shoot*> shoots) {
     ship.Render(renderer);
     for (int i = 0; i < shoots.size(); i++) {
-        if (isShoot) {
-            shoots[i].Render(renderer);
-        }
+        shoots[i]->Render(renderer);
     }
 }
 
-void Update(float dt, SDL_Renderer* renderer, Ship& ship, std::vector<Shoot> shoots, Up up, Right right, Left left, Down down, bool isShoot, bool isUp, bool isRight, bool isLeft, bool isDown) {
+void Update(float dt, Ship& ship, std::vector<Shoot*> shoots, Up& up, Right& right, Left& left, Down& down, bool isUp, bool isRight, bool isLeft, bool isDown) {
     for (int i = 0; i < shoots.size(); i++) {
         up.Moving(shoots[i], dt);
     }
@@ -54,6 +57,7 @@ int main(int argc, char** argv) {
 
     SDL_SetRenderLogicalPresentation(renderer, 1024, 768,
         SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
     Niveau* niveau_1 = new Niveau;
     niveau_1->CreateEnnemy("Niveau_1.txt");
     Niveau* niveau_2 = new Niveau;
@@ -61,7 +65,7 @@ int main(int argc, char** argv) {
     Button* exit = new Exit(renderer);
     Button* start = new Start(renderer);
     Ship ship(renderer);
-    std::vector<Shoot> shoots;
+    std::vector<Shoot*> shoots;
     Up up;
     Down down;
     Right right;
@@ -73,7 +77,6 @@ int main(int argc, char** argv) {
     bool isLeft = false;
     bool isDown = false;
     bool gameStart = false;
-    bool isShoot = false;
     bool keepGoing = true;
     float timePrev = 0;
     while (keepGoing) {
@@ -119,8 +122,7 @@ int main(int argc, char** argv) {
                     isDown = true;
                 }
                 if (event.key.key == SDLK_SPACE) {
-                    isShoot = true;
-                    Shoot shoot(renderer, ship);
+                    Shoot* shoot = new Shoot(renderer, ship);
                     shoots.push_back(shoot);
                 }
             }
@@ -145,12 +147,11 @@ int main(int argc, char** argv) {
         bg.Render(renderer, window_w, window_h);
 
         if (gameStart) {
-            Update(dt, renderer, ship, shoots, up, right, left, down, isShoot, isUp, isRight, isLeft, isDown);
-            GameRenderer(renderer, ship, shoots, isShoot);
+            Update(dt, ship, shoots, up, right, left, down, isUp, isRight, isLeft, isDown);
+            GameRenderer(renderer, ship, shoots);
         }
         else {
-            exit->Render(renderer);
-            start->Render(renderer);
+            MenuRenderer(renderer, exit, start);
         }
         SDL_RenderPresent(renderer);
     }
@@ -162,6 +163,9 @@ int main(int argc, char** argv) {
     delete start; start = nullptr;
     delete niveau_1; niveau_1 = nullptr;
     delete niveau_2; niveau_2 = nullptr;
-
+    for (Shoot* s : shoots) {
+        delete s; s = nullptr;
+    }
+    shoots.clear();
     return 0;
 }

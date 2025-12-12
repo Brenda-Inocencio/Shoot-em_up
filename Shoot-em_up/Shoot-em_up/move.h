@@ -6,7 +6,7 @@ class Shoot;
 class Up {
 public:
 	void Moving(Ship& ship, float dt);
-	void Moving(Shoot& shoot, float dt);
+	void Moving(Shoot* shoot, float dt);
 };
 
 class Right {

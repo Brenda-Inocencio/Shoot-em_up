@@ -6,8 +6,8 @@ void Up::Moving(Ship& ship, float dt) {
 	ship.pos_y -= 150.0 * dt;
 }
 
-void Up::Moving(Shoot& shoot, float dt) {
-	shoot.pos_y -= 150.0 * dt;
+void Up::Moving(Shoot* shoot, float dt) {
+	shoot->pos_y -= 80 * dt;
 }
 
 void Right::Moving(Ship& ship, float dt) {
