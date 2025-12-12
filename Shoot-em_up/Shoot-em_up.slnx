@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Shoot-em_up/Shoot-em_up.vcxproj" />
+  <Project Path="Shoot-em_up/Shoot-em_up.vcxproj" Id="0b506346-b42c-4741-8fb2-89dc89de6be3" />
 </Solution>

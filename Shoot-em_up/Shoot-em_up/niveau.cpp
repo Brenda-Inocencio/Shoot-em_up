@@ -5,7 +5,7 @@
 
 Niveau::Niveau() {}
 
-void Niveau::CreateEnnemy(std::string path) {
+void Niveau::CreateEnnemy(std::string path, SDL_Renderer* renderer) {
 	std::ifstream file(path);
 	if (!file) {
 		SDL_Log("Impossible d'ouvrir le fichier .txt");
@@ -45,8 +45,13 @@ void Niveau::CreateEnnemy(std::string path) {
 				if (std::getline(file, line)) {
 					hp = std::stof(line);
 				}
-				Ennemy* ennemy = new Ennemy(timer, nb, height, speed, hp);
+				ennemy = new Ennemy(timer, nb, height, speed, hp, renderer);
+				ennemies.push_back(ennemy);
 			}
 		}
 	}
+}
+
+Niveau::~Niveau() {
+	delete ennemy; ennemy = nullptr;
 }
