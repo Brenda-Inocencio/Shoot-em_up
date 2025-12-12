@@ -7,6 +7,8 @@
 #include "background.h"
 #include "exit.h"
 #include "start.h"
+#include "pause.h"
+#include "play.h"
 #include "move.h"
 #include "niveau.h"
 #include "ennemy.h"
@@ -21,9 +23,9 @@ void GameRenderer(SDL_Renderer* renderer, Ship& ship, std::vector<Shoot*> shoots
     for (int i = 0; i < shoots.size(); i++) {
         shoots[i]->Render(renderer);
     }
-    for (int i = 0; i < niveau->ennemies.size(); i++) {
-        niveau->ennemies[i]->Render(renderer);
-    }
+    //for (int i = 0; i < niveau->ennemies.size(); i++) {
+    //    niveau->ennemies[i]->Render(renderer);
+    //}
 }
 
 void Update(float dt, Ship& ship, std::vector<Shoot*> shoots, Up& up, Right& right, Left& left, Down& down, bool isUp, bool isRight, bool isLeft, bool isDown) {
@@ -68,6 +70,8 @@ int main(int argc, char** argv) {
     niveau_2->CreateEnnemy("Niveau_2.txt", renderer);
     Button* exit = new Exit(renderer);
     Button* start = new Start(renderer);
+    Button* pause = new Pause(renderer);
+    Button* play = new Play(renderer);
     Ship ship(renderer);
     std::vector<Shoot*> shoots;
     Up up;
@@ -81,6 +85,7 @@ int main(int argc, char** argv) {
     bool isLeft = false;
     bool isDown = false;
     bool gameStart = false;
+    bool isPaused = false;
     bool keepGoing = true;
     float timePrev = 0;
     while (keepGoing) {
@@ -95,20 +100,41 @@ int main(int argc, char** argv) {
             else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
                 float mx = event.button.x;
                 float my = event.button.y;
-                if (mx >= exit->buttonRect.x && mx <= exit->buttonRect.x + exit->buttonRect.w &&
-                    my >= exit->buttonRect.y && my <= exit->buttonRect.y + exit->buttonRect.h) {
-                    if (event.type != SDL_EVENT_MOUSE_BUTTON_UP) {
-                        exit->Press(renderer);
-                        SDL_RenderPresent(renderer);
-                        keepGoing = false;
+                if (isPaused) {
+                    if (mx >= exit->buttonRect.x && mx <= exit->buttonRect.x + exit->buttonRect.w &&
+                        my >= exit->buttonRect.y && my <= exit->buttonRect.y + exit->buttonRect.h) {
+                        if (event.type != SDL_EVENT_MOUSE_BUTTON_UP) {
+                            exit->Press(renderer);
+                            SDL_RenderPresent(renderer);
+                            isPaused = false;
+                            gameStart = false;
+                        }
+                    }
+                    if (mx >= start->buttonRect.x && mx <= start->buttonRect.x + start->buttonRect.w &&
+                        my >= start->buttonRect.y && my <= start->buttonRect.y + start->buttonRect.h) {
+                        if (event.type != SDL_EVENT_MOUSE_BUTTON_UP) {
+                            start->Press(renderer);
+                            SDL_RenderPresent(renderer);
+                            isPaused = false;
+                        }
                     }
                 }
-                if (mx >= start->buttonRect.x && mx <= start->buttonRect.x + start->buttonRect.w &&
-                    my >= start->buttonRect.y && my <= start->buttonRect.y + start->buttonRect.h) {
-                    if (event.type != SDL_EVENT_MOUSE_BUTTON_UP) {
-                        start->Press(renderer);
-                        SDL_RenderPresent(renderer);
-                        gameStart = true;
+                else {
+                    if (mx >= exit->buttonRect.x && mx <= exit->buttonRect.x + exit->buttonRect.w &&
+                        my >= exit->buttonRect.y && my <= exit->buttonRect.y + exit->buttonRect.h) {
+                        if (event.type != SDL_EVENT_MOUSE_BUTTON_UP) {
+                            exit->Press(renderer);
+                            SDL_RenderPresent(renderer);
+                            keepGoing = false;
+                        }
+                    }
+                    if (mx >= start->buttonRect.x && mx <= start->buttonRect.x + start->buttonRect.w &&
+                        my >= start->buttonRect.y && my <= start->buttonRect.y + start->buttonRect.h) {
+                        if (event.type != SDL_EVENT_MOUSE_BUTTON_UP) {
+                            start->Press(renderer);
+                            SDL_RenderPresent(renderer);
+                            gameStart = true;
+                        }
                     }
                 }
             }
@@ -128,6 +154,9 @@ int main(int argc, char** argv) {
                 if (event.key.key == SDLK_SPACE) {
                     Shoot* shoot = new Shoot(renderer, ship);
                     shoots.push_back(shoot);
+                }
+                if (event.key.key == SDLK_ESCAPE) {
+                    isPaused = true;
                 }
             }
             if (event.type == SDL_EVENT_KEY_UP) {
@@ -150,11 +179,16 @@ int main(int argc, char** argv) {
         SDL_RenderClear(renderer);
         bg.Render(renderer, window_w, window_h);
 
-        if (gameStart) {
+        if (isPaused) {
+            bg.Render(renderer, window_w, window_h);
+            pause->Render(renderer);
+            play->Render(renderer);
+        }
+        else if (gameStart) {
             Update(dt, ship, shoots, up, right, left, down, isUp, isRight, isLeft, isDown);
             GameRenderer(renderer, ship, shoots, niveau_1);
         }
-        else {
+        else if (!isPaused && !gameStart) {
             MenuRenderer(renderer, exit, start);
         }
         SDL_RenderPresent(renderer);
@@ -165,6 +199,8 @@ int main(int argc, char** argv) {
     TTF_Quit();
     delete exit; exit = nullptr;
     delete start; start = nullptr;
+    delete pause; pause = nullptr;
+    delete play; play = nullptr;
     delete niveau_1; niveau_1 = nullptr;
     delete niveau_2; niveau_2 = nullptr;
     for (Shoot* s : shoots) {
