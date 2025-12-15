@@ -1,5 +1,3 @@
-//test
-
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
@@ -20,17 +18,51 @@ void MenuRenderer(SDL_Renderer* renderer, Button* exit, Button* start) {
     start->Render(renderer);
 }
 
-void GameRenderer(SDL_Renderer* renderer, Ship& ship, std::vector<Shoot*> shoots, Niveau* niveau) {
+void Collisions(std::vector<Shoot*>& shoots, std::vector<Ennemy*>& ennemies) {
+    shoots.erase(
+        std::remove_if(shoots.begin(), shoots.end(),
+            [&](Shoot* s)
+            {
+                // projectile hors écran
+                float sx = s->pos_x;
+                float sy = s->pos_y;
+                if (sy < 0) {
+                    delete s;
+                    return true; //retire le projectile
+                }
+
+                // Collision avec un ennemi
+                for (auto& e : ennemies)
+                {
+                    float ex = e->pos_x;
+                    float ey = e->pos_y;
+                    if (sx >= ex && sx <= ex + 80 &&
+                        sy >= ey && sy <= ey + 80)
+                    {
+                        //destruction ennemi si besoin
+                        delete s;
+                        return true;
+                    }
+                }
+                return false; // garde le projectile
+            }
+        ),
+        shoots.end()
+    );
+}
+
+void GameRenderer(SDL_Renderer* renderer, Ship& ship, std::vector<Shoot*>& shoots, Niveau* niveau) {
     ship.Render(renderer);
     for (int i = 0; i < shoots.size(); i++) {
         shoots[i]->Render(renderer);
     }
-    //for (int i = 0; i < niveau->ennemies.size(); i++) {
-    //    niveau->ennemies[i]->Render(renderer);
-    //}
+   /* for (int i = 0; i < niveau->ennemies.size(); i++) {
+        niveau->ennemies[i]->Render(renderer);
+    }*/
+    niveau->ennemies[0]->Render(renderer);
 }
 
-void Update(float dt, Ship& ship, std::vector<Shoot*> shoots, Up& up, Right& right, Left& left, Down& down, bool isUp, bool isRight, bool isLeft, bool isDown) {
+void Update(float dt, Ship& ship, std::vector<Shoot*>& shoots, Up& up, Right& right, Left& left, Down& down, bool isUp, bool isRight, bool isLeft, bool isDown) {
     for (int i = 0; i < shoots.size(); i++) {
         up.Moving(shoots[i], dt);
     }
@@ -51,6 +83,7 @@ void Update(float dt, Ship& ship, std::vector<Shoot*> shoots, Up& up, Right& rig
 int main(int argc, char** argv) {
     SDL_Window* window;
     SDL_Renderer* renderer;
+
     SDL_SetAppMetadata("SDL Test", "1.0", "games.anakata.test-sdl");
     if (!SDL_Init(SDL_INIT_VIDEO))
         return 1;
@@ -188,6 +221,7 @@ int main(int argc, char** argv) {
         }
         else if (gameStart) {
             Update(dt, ship, shoots, up, right, left, down, isUp, isRight, isLeft, isDown);
+            Collisions(shoots, niveau_1->ennemies);
             GameRenderer(renderer, ship, shoots, niveau_1);
         }
         else if (!isPaused && !gameStart) {
@@ -205,9 +239,6 @@ int main(int argc, char** argv) {
     delete play; play = nullptr;
     delete niveau_1; niveau_1 = nullptr;
     delete niveau_2; niveau_2 = nullptr;
-    for (Shoot* s : shoots) {
-        delete s; s = nullptr;
-    }
     shoots.clear();
     return 0;
 }

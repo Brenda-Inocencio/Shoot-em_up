@@ -7,7 +7,6 @@
 
 Ennemy::Ennemy() {
 	time = 0;
-	nb = 1;
 	height = 1;
 	speed = 0;
 	hp = 1;
@@ -15,9 +14,8 @@ Ennemy::Ennemy() {
 	pos_y = 0;
 }
 
-Ennemy::Ennemy(int _time, int _nb, int _height, float _speed, int _hp, SDL_Renderer* _renderer) {
+Ennemy::Ennemy(int _time, int _height, float _speed, int _hp, SDL_Renderer* _renderer) {
 	time = _time;
-	nb = _nb;
 	height = _height;
 	speed = _speed;
 	hp = _hp;

@@ -12,23 +12,18 @@ void Niveau::CreateEnnemy(std::string path, SDL_Renderer* renderer) {
 	}
 	else {
 		std::string line;
+		int timer = 2;
+		int nb = 1;
+		int height = 1;
+		float speed = 1;
+		float hp = 1;
 		while (std::getline(file, line)) {
-			int timer = 2;
-			int nb = 1;
-			int height = 1;
-			float speed = 1;
-			float hp = 1;
 			if (line.empty()) {
 				continue;
 			}
 			if (line == "time") {
 				if (std::getline(file, line)) {
 					timer = std::stoi(line);
-				}
-			}
-			else if (line == "nb") {
-				if (std::getline(file, line)) {
-					nb = std::stoi(line);
 				}
 			}
 			else if (line == "height") {
@@ -45,8 +40,15 @@ void Niveau::CreateEnnemy(std::string path, SDL_Renderer* renderer) {
 				if (std::getline(file, line)) {
 					hp = std::stof(line);
 				}
-				ennemy = new Ennemy(timer, nb, height, speed, hp, renderer);
-				ennemies.push_back(ennemy);
+			}
+			else if (line == "nb") {
+				if (std::getline(file, line)) {
+					nb = std::stoi(line);
+				}
+				for (int i = 0; i < nb; i++) {
+					ennemy = new Ennemy(timer, height, speed, hp, renderer);
+					ennemies.push_back(ennemy);
+				}
 			}
 		}
 	}
