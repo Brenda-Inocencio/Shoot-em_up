@@ -12,11 +12,8 @@
 #include "move.h"
 #include "niveau.h"
 #include "ennemy.h"
+#include "menu.h"
 
-void MenuRenderer(SDL_Renderer* renderer, Button* exit, Button* start) {
-    exit->Render(renderer);
-    start->Render(renderer);
-}
 
 void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots, 
     std::vector<Ennemy*>& ennemies) {
@@ -39,8 +36,6 @@ void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
                         sy >= e->pos_y && sy <= e->pos_y + 80)
                     {
                         
-
-
                         e->hp -= 2;
                         e->UpdateText(renderer);
 
@@ -136,6 +131,7 @@ int main(int argc, char** argv) {
     Down down;
     Right right;
     Left left;
+    Menu menu;
     Background bg(renderer);
 
     bool isUp = false;
@@ -239,8 +235,7 @@ int main(int argc, char** argv) {
 
         if (isPaused) {
             bg.Render(renderer, window_w, window_h);
-            pause->Render(renderer);
-            play->Render(renderer);
+            menu.MenuPauseRenderer(renderer, pause, play);
         }
         else if (gameStart) {
             Update(dt, ship, shoots, niveau_1, up, right, left, down, isUp, 
@@ -249,7 +244,7 @@ int main(int argc, char** argv) {
             GameRenderer(renderer, ship, shoots, niveau_1, now);
         }
         else if (!isPaused && !gameStart) {
-            MenuRenderer(renderer, exit, start);
+            menu.MenuRenderer(renderer, exit, start);
         }
         SDL_RenderPresent(renderer);
     }
