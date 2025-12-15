@@ -53,5 +53,5 @@ void Niveau::CreateEnnemy(std::string path, SDL_Renderer* renderer) {
 }
 
 Niveau::~Niveau() {
-	delete ennemy; ennemy = nullptr;
+	ennemies.clear();
 }

@@ -1,24 +1,29 @@
 #pragma once
+#include "SDL3/SDL.h"
 
 struct SDL_Renderer;
 struct SDL_Texture;
 struct SDL_Surface;
 struct TTF_Font;
+struct SDL_FRect;
 
 class Ennemy {
-	float time;
-	int height;
-	float speed;
-	int hp;
 	SDL_Texture* meteorite;
 	TTF_Font* font;
 	SDL_Surface* textSurface;
 	SDL_Texture* textTexture;
 public:
+	SDL_FRect rect;
+	float time;
+	int height;
+	float speed;
+	int hp;
 	float pos_x;
 	float pos_y;
-	Ennemy();
 	Ennemy(int _time, int _height, float _speed, int _hp, SDL_Renderer* _renderer);
 	void Render(SDL_Renderer* _renderer, float _now);
 	int GetRandomNumber(int min, int max);
+	void Update(float dt);
+	void UpdateText(SDL_Renderer* _renderer);
+	~Ennemy();
 };
