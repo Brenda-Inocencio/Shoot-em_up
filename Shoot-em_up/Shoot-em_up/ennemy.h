@@ -6,7 +6,7 @@ struct SDL_Surface;
 struct TTF_Font;
 
 class Ennemy {
-	int time;
+	float time;
 	int height;
 	float speed;
 	int hp;
@@ -19,6 +19,6 @@ public:
 	float pos_y;
 	Ennemy();
 	Ennemy(int _time, int _height, float _speed, int _hp, SDL_Renderer* _renderer);
-	void Render(SDL_Renderer* _renderer);
+	void Render(SDL_Renderer* _renderer, float _now);
 	int GetRandomNumber(int min, int max);
 };

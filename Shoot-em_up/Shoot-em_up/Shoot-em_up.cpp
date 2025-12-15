@@ -51,15 +51,14 @@ void Collisions(std::vector<Shoot*>& shoots, std::vector<Ennemy*>& ennemies) {
     );
 }
 
-void GameRenderer(SDL_Renderer* renderer, Ship& ship, std::vector<Shoot*>& shoots, Niveau* niveau) {
+void GameRenderer(SDL_Renderer* renderer, Ship& ship, std::vector<Shoot*>& shoots, Niveau* niveau, float now) {
     ship.Render(renderer);
     for (int i = 0; i < shoots.size(); i++) {
         shoots[i]->Render(renderer);
     }
-   /* for (int i = 0; i < niveau->ennemies.size(); i++) {
-        niveau->ennemies[i]->Render(renderer);
-    }*/
-    niveau->ennemies[0]->Render(renderer);
+    for (int i = 0; i < niveau->ennemies.size(); i++) {
+        niveau->ennemies[i]->Render(renderer, now);
+    }
 }
 
 void Update(float dt, Ship& ship, std::vector<Shoot*>& shoots, Up& up, Right& right, Left& left, Down& down, bool isUp, bool isRight, bool isLeft, bool isDown) {
@@ -222,7 +221,7 @@ int main(int argc, char** argv) {
         else if (gameStart) {
             Update(dt, ship, shoots, up, right, left, down, isUp, isRight, isLeft, isDown);
             Collisions(shoots, niveau_1->ennemies);
-            GameRenderer(renderer, ship, shoots, niveau_1);
+            GameRenderer(renderer, ship, shoots, niveau_1, now);
         }
         else if (!isPaused && !gameStart) {
             MenuRenderer(renderer, exit, start);

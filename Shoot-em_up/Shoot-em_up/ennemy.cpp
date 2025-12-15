@@ -40,16 +40,17 @@ Ennemy::Ennemy(int _time, int _height, float _speed, int _hp, SDL_Renderer* _ren
 	}
 }
 
-void Ennemy::Render(SDL_Renderer* _renderer) {
+void Ennemy::Render(SDL_Renderer* _renderer, float _now) {
 	if (meteorite) {
-		SDL_FRect rect = { pos_x, pos_y, 80, 80 };
-		SDL_RenderTexture(_renderer, meteorite, nullptr, &rect);
-
-		if (textTexture) {
-			float tw, th;
-			SDL_GetTextureSize(textTexture, &tw, &th);
-			SDL_FRect textRect = { pos_x + 30, pos_y + 30, (float)tw, (float)th };
-			SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+		if (time <= _now) {
+			SDL_FRect rect = {pos_x, pos_y, 80, 80};
+			SDL_RenderTexture(_renderer, meteorite, nullptr, &rect);
+			if (textTexture) {
+				float tw, th;
+				SDL_GetTextureSize(textTexture, &tw, &th);
+				SDL_FRect textRect = {pos_x + 30, pos_y + 30, (float)tw, (float)th};
+				SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+			}
 		}
 	}
 }

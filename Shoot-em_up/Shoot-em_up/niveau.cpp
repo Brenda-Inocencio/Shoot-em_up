@@ -3,8 +3,6 @@
 #include <SDL3/SDL.h>
 #include "ennemy.h"
 
-Niveau::Niveau() {}
-
 void Niveau::CreateEnnemy(std::string path, SDL_Renderer* renderer) {
 	std::ifstream file(path);
 	if (!file) {
@@ -12,7 +10,7 @@ void Niveau::CreateEnnemy(std::string path, SDL_Renderer* renderer) {
 	}
 	else {
 		std::string line;
-		int timer = 2;
+		float timer = 2.0f;
 		int nb = 1;
 		int height = 1;
 		float speed = 1;
@@ -23,7 +21,7 @@ void Niveau::CreateEnnemy(std::string path, SDL_Renderer* renderer) {
 			}
 			if (line == "time") {
 				if (std::getline(file, line)) {
-					timer = std::stoi(line);
+					timer = std::stof(line);
 				}
 			}
 			else if (line == "height") {
