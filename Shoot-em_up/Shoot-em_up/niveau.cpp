@@ -1,9 +1,10 @@
+
 #include "niveau.h"
 #include <fstream>
 #include <SDL3/SDL.h>
 #include "ennemy.h"
 
-void Niveau::CreateEnnemy(std::string path, SDL_Renderer* renderer, float _now) {
+void Niveau::CreateEnnemy(std::string path, SDL_Renderer* renderer) {
 	std::ifstream file(path);
 	if (!file) {
 		SDL_Log("Impossible d'ouvrir le fichier .txt");
@@ -44,10 +45,9 @@ void Niveau::CreateEnnemy(std::string path, SDL_Renderer* renderer, float _now) 
 					nb = std::stoi(line);
 				}
 				for (int i = 0; i < nb; i++) {
-					if (timer <= _now) {
-						ennemy = new Ennemy(height, speed, hp, renderer);
-						ennemies.push_back(ennemy);
-					}
+					ennemy = new Ennemy(timer, height, speed, hp, renderer);
+					ennemies.push_back(ennemy);
+					
 				}
 			}
 		}

@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include "ship.h"
 #include "shoot.h"
@@ -18,7 +19,9 @@
 void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots, 
     std::vector<Ennemy*>& ennemies) {
     shoots.erase(
-        std::remove_if(shoots.begin(), shoots.end(), [&](Shoot* s) {
+        std::remove_if(
+            shoots.begin(), shoots.end(), [&](Shoot* s) {
+
                 // projectile hors écran
                 float sx = s->pos_x;
                 float sy = s->pos_y;
@@ -30,11 +33,16 @@ void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
                 // Collision avec un ennemi
                 for (auto& e : ennemies)
                 {
-                    SDL_FRect shootRect = s->rect;
-                    SDL_FRect enemyRect = e->rect;
+                    if (!e->isActive)
+                        continue;
 
-                    if (SDL_GetRectIntersectionFloat(&shootRect, &enemyRect, nullptr)) {
+                    if (sx >= e->pos_x + 2 && sx <= e->pos_x + 78 &&
+                        sy >= e->pos_y && sy <= e->pos_y + 80 ||
+                        sx + 15 >= e->pos_x + 2 && sx + 15 <= e->pos_x + 75 &&
+                        sy >= e->pos_y && sy <= e->pos_y + 80) 
+                    {
                         e->hp -= 2;
+                        e->UpdateText(renderer);
                         delete s;
                         return true;
                     }
@@ -48,7 +56,12 @@ void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
 
     //vérifie si l'ennemi meurt et le detruit si c est le cas
     ennemies.erase(
-        std::remove_if(ennemies.begin(), ennemies.end(), [&](Ennemy* e) {
+        std::remove_if(
+            ennemies.begin(), ennemies.end(), [&](Ennemy* e) {
+                if (e->pos_y > 668) {
+                    delete e;
+                    return true; 
+                }
                 if (e->hp <= 0) {
                     delete e;
                     return true;
@@ -73,9 +86,10 @@ void GameRenderer(SDL_Renderer* renderer, Ship& ship, std::vector<Shoot*>& shoot
 
 void Update(float dt, Ship& ship, std::vector<Shoot*>& shoots, Niveau* niveau ,Up& up, 
     Right& right, Left& left, Down& down, bool isUp, bool isRight, bool isLeft, bool isDown,
-    float now, SDL_Renderer* renderer, std::string path) {
-    for (Ennemy* e : niveau->ennemies)
-        e->Update(dt);
+    float now) {
+    for (Ennemy* e : niveau->ennemies) {
+        e->Update(now, dt);
+    }
     for (Shoot* s : shoots)
         s->Update(dt);
     if (isUp) {
@@ -90,7 +104,6 @@ void Update(float dt, Ship& ship, std::vector<Shoot*>& shoots, Niveau* niveau ,U
     if (isDown) {
         down.Moving(ship, dt);
     }
-    niveau->CreateEnnemy(path, renderer, now);
 }
 
 int main(int argc, char** argv) {
@@ -113,7 +126,9 @@ int main(int argc, char** argv) {
         SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
     Niveau* niveau_1 = new Niveau;
+    niveau_1->CreateEnnemy("Niveau_1.txt", renderer);
     Niveau* niveau_2 = new Niveau;
+    niveau_2->CreateEnnemy("Niveau_2.txt", renderer);
     Button* exit = new Exit(renderer);
     Button* start = new Start(renderer);
     Button* pause = new Pause(renderer);
@@ -221,6 +236,7 @@ int main(int argc, char** argv) {
                 }
             }
         }
+
         int window_w, window_h;
         SDL_GetWindowSize(window, &window_w, &window_h);
         SDL_RenderClear(renderer);
@@ -231,16 +247,18 @@ int main(int argc, char** argv) {
             menu.MenuPauseRenderer(renderer, pause, play);
         }
         else if (gameStart) {
-            Update(dt, ship, shoots, niveau_1, up, right, left, down, isUp, 
-                isRight, isLeft, isDown, now, renderer, "Niveau_1.txt");
+            Update(dt, ship, shoots, niveau_1, up, right, left, down, isUp,
+                isRight, isLeft, isDown, now);
             Collisions(renderer, shoots, niveau_1->ennemies);
             GameRenderer(renderer, ship, shoots, niveau_1, now);
         }
         else if (!isPaused && !gameStart) {
             menu.MenuRenderer(renderer, exit, start);
         }
+
         SDL_RenderPresent(renderer);
     }
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -254,3 +272,4 @@ int main(int argc, char** argv) {
     shoots.clear();
     return 0;
 }
+
