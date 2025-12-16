@@ -10,5 +10,5 @@ public:
 	std::vector<Ennemy*> ennemies;
 	Ennemy* ennemy;
 	~Niveau();
-	void CreateEnnemy(std::string path, SDL_Renderer* renderer);
+	void CreateEnnemy(std::string path, SDL_Renderer* renderer, float now);
 };

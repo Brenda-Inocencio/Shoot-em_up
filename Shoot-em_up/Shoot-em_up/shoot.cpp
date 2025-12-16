@@ -1,5 +1,4 @@
 #include "shoot.h"
-#include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include "ship.h"
 
@@ -14,7 +13,16 @@ Shoot::Shoot(SDL_Renderer* _renderer, Ship& _ship) {
 
 void Shoot::Render(SDL_Renderer* _renderer) {
 	if (laser) {
-		SDL_FRect rect = { pos_x, pos_y, 200, 200 };
+		rect = { pos_x, pos_y, 200, 200 };
 		SDL_RenderTexture(_renderer, laser, nullptr, &rect);
 	}
+}
+
+void Shoot::Update(float dt) {
+	pos_y -= 80 * dt;
+
+	rect.x = pos_x;
+	rect.y = pos_y;
+	rect.w = 200;
+	rect.h = 200;
 }

@@ -14,14 +14,13 @@ class Ennemy {
 	SDL_Texture* textTexture;
 public:
 	SDL_FRect rect;
-	float time;
 	int height;
 	float speed;
 	int hp;
 	float pos_x;
 	float pos_y;
-	Ennemy(int _time, int _height, float _speed, int _hp, SDL_Renderer* _renderer);
-	void Render(SDL_Renderer* _renderer, float _now);
+	Ennemy(int _height, float _speed, int _hp, SDL_Renderer* _renderer);
+	void Render(SDL_Renderer* _renderer);
 	int GetRandomNumber(int min, int max);
 	void Update(float dt);
 	void UpdateText(SDL_Renderer* _renderer);

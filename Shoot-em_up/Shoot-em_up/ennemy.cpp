@@ -4,8 +4,7 @@
 #include <random>
 #include <string>
 
-Ennemy::Ennemy(int _time, int _height, float _speed, int _hp, SDL_Renderer* _renderer) {
-	time = _time;
+Ennemy::Ennemy(int _height, float _speed, int _hp, SDL_Renderer* _renderer) {
 	height = _height;
 	speed = _speed;
 	hp = _hp;
@@ -31,17 +30,15 @@ Ennemy::Ennemy(int _time, int _height, float _speed, int _hp, SDL_Renderer* _ren
 	}
 }
 
-void Ennemy::Render(SDL_Renderer* _renderer, float _now) {
+void Ennemy::Render(SDL_Renderer* _renderer) {
 	if (meteorite) {
-		if (time <= _now) {
-			SDL_FRect dst = {pos_x, pos_y, 80.0f, 80.0f};
-			SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
-			if (textTexture) {
-				float tw, th;
-				SDL_GetTextureSize(textTexture, &tw, &th);
-				SDL_FRect textRect = {pos_x + 30, pos_y + 30, (float)tw, (float)th};
-				SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
-			}
+		SDL_FRect dst = {pos_x, pos_y, 80.0f, 80.0f};
+		SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
+		if (textTexture) {
+			float tw, th;
+			SDL_GetTextureSize(textTexture, &tw, &th);
+			SDL_FRect textRect = {pos_x + 30, pos_y + 30, (float)tw, (float)th};
+			SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
 		}
 	}
 }

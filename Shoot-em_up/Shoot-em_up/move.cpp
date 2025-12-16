@@ -8,10 +8,6 @@ void Up::Moving(Ship& ship, float dt) {
 	}
 }
 
-void Up::Moving(Shoot* shoot, float dt) {
-	shoot->pos_y -= 80 * dt;
-}
-
 void Right::Moving(Ship& ship, float dt) {
 	if (ship.pos_x < 944) {
 		ship.pos_x += 150.0 * dt;
