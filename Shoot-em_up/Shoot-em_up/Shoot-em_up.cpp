@@ -36,9 +36,9 @@ void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
                     if (!e->isActive)
                         continue;
 
-                    if (sx >= e->pos_x + 2 && sx <= e->pos_x + 78 &&
+                    if (sx >= e->pos_x + 2 && sx <= e->pos_x + 72 &&
                         sy >= e->pos_y && sy <= e->pos_y + 80 ||
-                        sx + 15 >= e->pos_x + 2 && sx + 15 <= e->pos_x + 75 &&
+                        sx + 15 >= e->pos_x + 2 && sx + 15 <= e->pos_x + 72 &&
                         sy >= e->pos_y && sy <= e->pos_y + 80) 
                     {
                         e->hp -= 2;
@@ -117,6 +117,10 @@ int main(int argc, char** argv) {
     if (!SDL_CreateWindowAndRenderer("Shoot'em up", 1024, 768, 0,
         &window, &renderer))
         return 1;
+
+    if (!SDL_SetRenderVSync(renderer, 1)) {
+        SDL_Log("Impossible d'activer le VSync : %s", SDL_GetError());
+    }
 
     if (TTF_Init() < 0) {
         SDL_Log("Erreur TTF_Init: %s", SDL_GetError());
