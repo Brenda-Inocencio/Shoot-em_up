@@ -6,7 +6,9 @@ struct SDL_Renderer;
 
 class Score {
 	SDL_Surface* textSurface;
+	SDL_Surface* scoreSurface;
 	SDL_Texture* textTexture;
+	SDL_Texture* scoreTexture;
 public :
 	int score;
 	Score(SDL_Renderer* renderer);
