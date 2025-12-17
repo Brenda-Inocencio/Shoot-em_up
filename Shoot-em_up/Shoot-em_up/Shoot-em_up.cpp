@@ -1,7 +1,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include "ship.h"
 #include "shoot.h"
@@ -10,6 +9,7 @@
 #include "start.h"
 #include "pause.h"
 #include "play.h"
+#include "gameover.h"
 #include "move.h"
 #include "niveau.h"
 #include "ennemy.h"
@@ -36,9 +36,9 @@ void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
                     if (!e->isActive)
                         continue;
 
-                    if (sx >= e->pos_x + 2 && sx <= e->pos_x + 72 &&
+                    if (sx >= e->pos_x + 8 && sx <= e->pos_x + 72 &&
                         sy >= e->pos_y && sy <= e->pos_y + 80 ||
-                        sx + 15 >= e->pos_x + 2 && sx + 15 <= e->pos_x + 72 &&
+                        sx + 15 >= e->pos_x + 8 && sx + 15 <= e->pos_x + 72 &&
                         sy >= e->pos_y && sy <= e->pos_y + 80) 
                     {
                         e->hp -= 2;

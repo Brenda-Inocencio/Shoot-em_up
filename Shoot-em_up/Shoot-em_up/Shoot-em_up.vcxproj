@@ -149,6 +149,7 @@
     <ClCompile Include="niveau.cpp" />
     <ClCompile Include="pause.cpp" />
     <ClCompile Include="play.cpp" />
+    <ClCompile Include="score.cpp" />
     <ClCompile Include="ship.cpp" />
     <ClCompile Include="Shoot-em_up.cpp" />
     <ClCompile Include="shoot.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="niveau.h" />
     <ClInclude Include="pause.h" />
     <ClInclude Include="play.h" />
+    <ClInclude Include="score.h" />
     <ClInclude Include="ship.h" />
     <ClInclude Include="shoot.h" />
     <ClInclude Include="start.h" />
