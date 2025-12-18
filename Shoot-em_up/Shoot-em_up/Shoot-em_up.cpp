@@ -11,13 +11,15 @@
 #include "pause.h"
 #include "play.h"
 #include "gameover.h"
+#include "win.h"
 #include "move.h"
 #include "niveau.h"
 #include "ennemy.h"
 #include "menu.h"
 
 void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots, 
-    std::vector<Ennemy*>& ennemies, Ship& ship, float now, Score* score, bool& isGameOver) {
+    std::vector<Ennemy*>& ennemies, Ship& ship, float now, Score* score, bool& isGameOver,
+    bool& isWin) {
     shoots.erase(
         std::remove_if(
             shoots.begin(), shoots.end(), [&](Shoot* s) {
@@ -73,7 +75,7 @@ void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
         ennemies.end()
     );
     if (ennemies.empty()) {
-
+        isWin = true;
     }
 
     float shipx = ship.pos_x;
@@ -160,6 +162,7 @@ int main(int argc, char** argv) {
     Button* pause = new Pause(renderer);
     Button* play = new Play(renderer);
     Button* gameOver = new GameOver(renderer);
+    Button* win = new Win(renderer);
     Score* score = new Score(renderer);
     Ship ship(renderer);
     std::vector<Shoot*> shoots;
@@ -175,8 +178,10 @@ int main(int argc, char** argv) {
     bool isLeft = false;
     bool isDown = false;
     bool isGameOver = false;
+    bool isWin= false;
     bool gameStart = false;
     bool isPaused = false;
+    bool isLvl1 = true;
     bool keepGoing = true;
     float timePrev = 0;
     while (keepGoing) {
@@ -271,7 +276,16 @@ int main(int argc, char** argv) {
         SDL_RenderClear(renderer);
         bg.Render(renderer, window_w, window_h);
 
-        if (isGameOver) {
+        if (isWin) {
+            if (isLvl1) {
+                isLvl1 = false;
+                bg.Render(renderer, window_w, window_h);
+                menu.MenuWinRenderer(renderer, win, niveau_1);
+                score->Render(renderer);
+            }
+            else gameStart = false;
+        }
+        else if (isGameOver) {
             bg.Render(renderer, window_w, window_h);
             menu.MenuGameOverRenderer(renderer, gameOver);
             score->Render(renderer);
@@ -282,15 +296,21 @@ int main(int argc, char** argv) {
             menu.MenuPauseRenderer(renderer, pause, play);
         }
         else if (gameStart) {
-            Update(dt, ship, shoots, niveau_1, up, right, left, down, isUp,
-                isRight, isLeft, isDown, now);
-            Collisions(renderer, shoots, niveau_1->ennemies, ship, now, score, isGameOver);
-            GameRenderer(renderer, ship, shoots, niveau_1, now);
+            if (isLvl1) {
+                Update(dt, ship, shoots, niveau_1, up, right, left, down, isUp,
+                    isRight, isLeft, isDown, now);
+                Collisions(renderer, shoots, niveau_1->ennemies, ship, now, score,
+                    isGameOver, isWin);
+                GameRenderer(renderer, ship, shoots, niveau_1, now);
+            }
+            else {
+                Update(dt, ship, shoots, niveau_2, up, right, left, down, isUp,
+                    isRight, isLeft, isDown, now);
+                Collisions(renderer, shoots, niveau_2->ennemies, ship, now, score,
+                    isGameOver, isWin);
+                GameRenderer(renderer, ship, shoots, niveau_2, now);
+            }
         }
-        else if (!isPaused && !gameStart) {
-            menu.MenuRenderer(renderer, exit, start);
-        }
-
         SDL_RenderPresent(renderer);
     }
 

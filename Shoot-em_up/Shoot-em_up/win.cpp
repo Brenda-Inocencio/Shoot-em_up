@@ -31,11 +31,11 @@ void Win::Render(SDL_Renderer* _renderer) {
     buttonRect = {475, 600 , 100, 40};
     SDL_SetRenderDrawColor(_renderer, 150, 0, 0, 200);
     SDL_RenderFillRect(_renderer, &buttonRect);
-    if (gameOverTexture) {
+    if (winTexture) {
         float tw, th;
-        SDL_GetTextureSize(gameOverTexture, &tw, &th);
+        SDL_GetTextureSize(winTexture, &tw, &th);
         SDL_FRect textRect = {475, 300, (float)tw, (float)th};
-        SDL_RenderTexture(_renderer, gameOverTexture, nullptr, &textRect);
+        SDL_RenderTexture(_renderer, winTexture, nullptr, &textRect);
     }
     if (textTexture) {
         float tw, th;
