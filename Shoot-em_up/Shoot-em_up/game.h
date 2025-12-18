@@ -24,4 +24,3 @@ public:
 		Right& right, Left& left, Down& down, bool isUp, bool isRight, bool isLeft, bool isDown,
 		float gameTime, float& shootCooldown, bool& canShoot);
 };
-

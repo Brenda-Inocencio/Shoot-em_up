@@ -14,7 +14,6 @@
 #include "win.h"
 #include "move.h"
 #include "niveau.h"
-#include "ennemy.h"
 #include "menu.h"
 
 int main(int argc, char** argv) {
@@ -25,7 +24,7 @@ int main(int argc, char** argv) {
     if (!SDL_Init(SDL_INIT_VIDEO))
         return 1;
 
-    if (!SDL_CreateWindowAndRenderer("Shoot'em up", 1024, 768, 0,
+    if (!SDL_CreateWindowAndRenderer("Magma Shooter", 1024, 768, 0,
         &window, &renderer))
         return 1;
 
@@ -235,4 +234,3 @@ int main(int argc, char** argv) {
     shoots.clear();
     return 0;
 }
-

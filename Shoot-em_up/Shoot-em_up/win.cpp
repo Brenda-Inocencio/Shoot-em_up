@@ -9,7 +9,7 @@ Win::Win(SDL_Renderer* renderer) {
     if (!winFont) {
         SDL_Log("Erreur chargement police: %s", SDL_GetError());
     }
-    winSurface = TTF_RenderText_Solid(winFont, "You win", 9, textColor);
+    winSurface = TTF_RenderText_Solid(winFont, "You win", 8, textColor);
     winTexture = SDL_CreateTextureFromSurface(renderer, winSurface);
     SDL_DestroySurface(winSurface);
     if (!winTexture) {

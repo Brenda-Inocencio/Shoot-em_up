@@ -1,5 +1,4 @@
 #include "game.h"
-#include <iostream>
 #include <vector>
 #include "score.h"
 #include "ship.h"
