@@ -1,4 +1,3 @@
-
 #include "ennemy.h"
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -35,8 +34,7 @@ Ennemy::Ennemy(float _timer, int _height, float _speed, int _hp, SDL_Renderer* _
 
 void Ennemy::Render(SDL_Renderer* _renderer) {
 	if (meteorite) {
-		if (isActive) 
-		{
+		if (isActive)  {
 			SDL_FRect dst = {pos_x, pos_y, 80.0f, 80.0f};
 			SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
 			if (textTexture) {

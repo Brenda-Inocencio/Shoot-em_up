@@ -12,5 +12,4 @@ public:
     ~Win();
     void Render(SDL_Renderer* renderer) override;
     void Press(SDL_Renderer* renderer) override;
-    void ChangeLevel(SDL_Renderer* renderer);
 };

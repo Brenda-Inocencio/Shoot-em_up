@@ -18,7 +18,7 @@
 #include "menu.h"
 
 void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots, 
-    std::vector<Ennemy*>& ennemies, Ship& ship, float now, Score* score, bool& isGameOver,
+    std::vector<Ennemy*>& ennemies, Ship& ship, float gameTime, Score* score, bool& isGameOver,
     bool& isWin) {
     shoots.erase(
         std::remove_if(
@@ -89,7 +89,7 @@ void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
             shipy >= e->pos_y && shipy <= e->pos_y + 68 ||
             e->pos_x + 72 >= shipx && e->pos_x + 72 <= shipx + 80 &&
             shipy >= e->pos_y && shipy <= e->pos_y + 68) {
-            ship.Updatehp(now);
+            ship.Updatehp(gameTime);
             if (ship.life <= 0) {
                 isGameOver = true;
             }
@@ -98,7 +98,7 @@ void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
 }
 
 void GameRenderer(SDL_Renderer* renderer, Ship& ship, std::vector<Shoot*>& shoots, 
-    Niveau* niveau, float now) {
+    Niveau* niveau) {
     ship.Render(renderer);
     for (Shoot* s : shoots)
         s->Render(renderer);
@@ -110,9 +110,17 @@ void GameRenderer(SDL_Renderer* renderer, Ship& ship, std::vector<Shoot*>& shoot
 
 void Update(float dt, Ship& ship, std::vector<Shoot*>& shoots, Niveau* niveau ,Up& up, 
     Right& right, Left& left, Down& down, bool isUp, bool isRight, bool isLeft, bool isDown,
-    float now) {
+    float gameTime, float& shootCooldown, bool& canShoot) {
+
+    if (gameTime - shootCooldown>= 0.25f) {
+        canShoot = true;
+    }
+    if (canShoot) {
+        shootCooldown = gameTime;
+    }
+
     for (Ennemy* e : niveau->ennemies) {
-        e->Update(now, dt);
+        e->Update(gameTime, dt);
     }
     for (Shoot* s : shoots)
         s->Update(dt);
@@ -162,7 +170,7 @@ int main(int argc, char** argv) {
     Button* pause = new Pause(renderer);
     Button* play = new Play(renderer);
     Button* gameOver = new GameOver(renderer);
-    Win* win = new Win(renderer);
+    Button* win = new Win(renderer);
     Score* score = new Score(renderer);
     Ship ship(renderer);
     std::vector<Shoot*> shoots;
@@ -184,6 +192,10 @@ int main(int argc, char** argv) {
     bool isLvl1 = true;
     bool keepGoing = true;
     float timePrev = 0;
+    float timeStart = 0;
+    float gameTime = 0;
+    float shootCooldown = 0;
+    bool canShoot = true;
     while (keepGoing) {
         float now = float(SDL_GetTicks()) / 1000.0f;
         float dt = now - timePrev;
@@ -215,7 +227,17 @@ int main(int argc, char** argv) {
                         }
                     }
                 }
-                else {
+                else if (isWin && mx >= start->buttonRect.x && mx <= start->buttonRect.x + start->buttonRect.w &&
+                    my >= start->buttonRect.y && my <= start->buttonRect.y + start->buttonRect.h) {
+                    if (event.type != SDL_EVENT_MOUSE_BUTTON_UP) {
+                        start->Press(renderer);
+                        SDL_RenderPresent(renderer);
+                        isWin = false;
+                        isLvl1= false;
+                        timeStart = now;
+                    }
+                }
+                else if (!gameStart) {
                     if (mx >= exit->buttonRect.x && mx <= exit->buttonRect.x + exit->buttonRect.w &&
                         my >= exit->buttonRect.y && my <= exit->buttonRect.y + exit->buttonRect.h) {
                         if (event.type != SDL_EVENT_MOUSE_BUTTON_UP) {
@@ -230,6 +252,7 @@ int main(int argc, char** argv) {
                             start->Press(renderer);
                             SDL_RenderPresent(renderer);
                             gameStart = true;
+                            timeStart = now;
                         }
                     }
                 }
@@ -248,8 +271,11 @@ int main(int argc, char** argv) {
                     isDown = true;
                 }
                 if (event.key.key == SDLK_SPACE) {
-                    Shoot* shoot = new Shoot(renderer, ship);
-                    shoots.push_back(shoot);
+                    if (canShoot) {
+                        Shoot* shoot = new Shoot(renderer, ship);
+                        shoots.push_back(shoot);
+                        canShoot = false;
+                    }
                 }
                 if (event.key.key == SDLK_ESCAPE) {
                     isPaused = true;
@@ -277,19 +303,9 @@ int main(int argc, char** argv) {
         bg.Render(renderer, window_w, window_h);
 
         if (isWin) {
-            if (isLvl1) {
-                isLvl1 = false;
-                bg.Render(renderer, window_w, window_h);
-                menu.MenuWinRenderer(renderer, win, play);
-                win->ChangeLevel(renderer);
-                score->Render(renderer);
-            }
-            else {
-                bg.Render(renderer, window_w, window_h);
-                menu.MenuWinRenderer(renderer, win, play);
-                score->Render(renderer);
-                gameStart = false;
-            }
+            bg.Render(renderer, window_w, window_h);
+            menu.MenuWinRenderer(renderer, win, play);
+            score->Render(renderer);
         }
         else if (isGameOver) {
             bg.Render(renderer, window_w, window_h);
@@ -302,19 +318,20 @@ int main(int argc, char** argv) {
             menu.MenuPauseRenderer(renderer, pause, play);
         }
         else if (gameStart) {
+            gameTime = now - timeStart;
             if (isLvl1) {
                 Update(dt, ship, shoots, niveau_1, up, right, left, down, isUp,
-                    isRight, isLeft, isDown, now);
-                Collisions(renderer, shoots, niveau_1->ennemies, ship, now, score,
+                    isRight, isLeft, isDown, gameTime, shootCooldown, canShoot);
+                Collisions(renderer, shoots, niveau_1->ennemies, ship, gameTime, score,
                     isGameOver, isWin);
-                GameRenderer(renderer, ship, shoots, niveau_1, now);
+                GameRenderer(renderer, ship, shoots, niveau_1);
             }
             else {
                 Update(dt, ship, shoots, niveau_2, up, right, left, down, isUp,
-                    isRight, isLeft, isDown, now);
-                Collisions(renderer, shoots, niveau_2->ennemies, ship, now, score,
+                    isRight, isLeft, isDown, gameTime, shootCooldown, canShoot);
+                Collisions(renderer, shoots, niveau_2->ennemies, ship, gameTime, score,
                     isGameOver, isWin);
-                GameRenderer(renderer, ship, shoots, niveau_2, now);
+                GameRenderer(renderer, ship, shoots, niveau_2);
             }
         }
         else {
