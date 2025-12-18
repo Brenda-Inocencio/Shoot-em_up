@@ -112,7 +112,7 @@ void Update(float dt, Ship& ship, std::vector<Shoot*>& shoots, Niveau* niveau ,U
     Right& right, Left& left, Down& down, bool isUp, bool isRight, bool isLeft, bool isDown,
     float gameTime, float& shootCooldown, bool& canShoot) {
 
-    if (gameTime - shootCooldown>= 0.25f) {
+    if (gameTime - shootCooldown >= 0.25f) {
         canShoot = true;
     }
     if (canShoot) {
@@ -186,7 +186,7 @@ int main(int argc, char** argv) {
     bool isLeft = false;
     bool isDown = false;
     bool isGameOver = false;
-    bool isWin= false;
+    bool isWin = false;
     bool gameStart = false;
     bool isPaused = false;
     bool isLvl1 = true;
@@ -348,6 +348,8 @@ int main(int argc, char** argv) {
     delete start; start = nullptr;
     delete pause; pause = nullptr;
     delete play; play = nullptr;
+    delete gameOver; gameOver = nullptr;
+    delete win; win = nullptr;
     delete score; score = nullptr;
     delete niveau_1; niveau_1 = nullptr;
     delete niveau_2; niveau_2 = nullptr;

@@ -143,6 +143,7 @@
     <ClCompile Include="button.cpp" />
     <ClCompile Include="ennemy.cpp" />
     <ClCompile Include="exit.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="gameover.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="move.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="button.h" />
     <ClInclude Include="ennemy.h" />
     <ClInclude Include="exit.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="gameover.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="move.h" />
