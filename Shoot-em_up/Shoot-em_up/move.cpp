@@ -2,22 +2,26 @@
 #include "ship.h"
 #include "shoot.h"
 
-void Up::Moving(Ship& ship) {
-	ship.pos_y -= 10;
+void Up::Moving(Ship& ship, float dt) {
+	if (ship.pos_y > 0) {
+		ship.pos_y -= 150.0 * dt;
+	}
 }
 
-void Up::Moving(Shoot& shoot) {
-	shoot.pos_y -= 10;
+void Right::Moving(Ship& ship, float dt) {
+	if (ship.pos_x < 944) {
+		ship.pos_x += 150.0 * dt;
+	}
 }
 
-void Right::Moving(Ship& ship) {
-	ship.pos_x += 10;
+void Left::Moving(Ship& ship, float dt) {
+	if (ship.pos_x > 0) {
+		ship.pos_x -= 150.0 * dt;
+	}
 }
 
-void Left::Moving(Ship& ship) {
-	ship.pos_x -= 10;
-}
-
-void Down::Moving(Ship& ship) {
-	ship.pos_y += 10;
+void Down::Moving(Ship& ship, float dt) {
+	if (ship.pos_y < 688) {
+		ship.pos_y += 150.0 * dt;
+	}
 }
