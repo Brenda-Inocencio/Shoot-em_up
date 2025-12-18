@@ -20,4 +20,5 @@ void Menu::MenuGameOverRenderer(SDL_Renderer* renderer, Button* gameOver) {
 
 void Menu::MenuWinRenderer(SDL_Renderer* renderer, Button* win, Button* play) {
     win->Render(renderer);
+    play->Render(renderer);
 }

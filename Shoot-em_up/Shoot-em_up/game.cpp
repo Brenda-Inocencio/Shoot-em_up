@@ -85,7 +85,6 @@ void Game::Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
             e->pos_x + 72 >= shipx && e->pos_x + 72 <= shipx + 80 &&
             shipy >= e->pos_y && shipy <= e->pos_y + 68) {
             ship.Updatehp(gameTime);
-            std::cout << ship.life;
             if (ship.life <= 0) {
                 isGameOver = true;
             }
