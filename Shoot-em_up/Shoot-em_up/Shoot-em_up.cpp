@@ -162,7 +162,7 @@ int main(int argc, char** argv) {
     Button* pause = new Pause(renderer);
     Button* play = new Play(renderer);
     Button* gameOver = new GameOver(renderer);
-    Button* win = new Win(renderer);
+    Win* win = new Win(renderer);
     Score* score = new Score(renderer);
     Ship ship(renderer);
     std::vector<Shoot*> shoots;
@@ -280,10 +280,16 @@ int main(int argc, char** argv) {
             if (isLvl1) {
                 isLvl1 = false;
                 bg.Render(renderer, window_w, window_h);
-                menu.MenuWinRenderer(renderer, win, niveau_1);
+                menu.MenuWinRenderer(renderer, win, play);
+                win->ChangeLevel(renderer);
                 score->Render(renderer);
             }
-            else gameStart = false;
+            else {
+                bg.Render(renderer, window_w, window_h);
+                menu.MenuWinRenderer(renderer, win, play);
+                score->Render(renderer);
+                gameStart = false;
+            }
         }
         else if (isGameOver) {
             bg.Render(renderer, window_w, window_h);
@@ -310,6 +316,9 @@ int main(int argc, char** argv) {
                     isGameOver, isWin);
                 GameRenderer(renderer, ship, shoots, niveau_2, now);
             }
+        }
+        else {
+            menu.MenuRenderer(renderer, exit, start);
         }
         SDL_RenderPresent(renderer);
     }

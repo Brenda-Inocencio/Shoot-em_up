@@ -8,10 +8,16 @@ Win::Win(SDL_Renderer* renderer) {
     if (!winFont) {
         SDL_Log("Erreur chargement police: %s", SDL_GetError());
     }
-    winSurface = TTF_RenderText_Solid(winFont, "You lose", 9, textColor);
+    winSurface = TTF_RenderText_Solid(winFont, "You win", 9, textColor);
     winTexture = SDL_CreateTextureFromSurface(renderer, winSurface);
     SDL_DestroySurface(winSurface);
     if (!winTexture) {
+        SDL_Log("Erreur rendu texte: %s", SDL_GetError());
+    }
+    surface = TTF_RenderText_Solid(winFont, "You move up to level 2", 23, textColor);
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_DestroySurface(surface);
+    if (!texture) {
         SDL_Log("Erreur rendu texte: %s", SDL_GetError());
     }
 
@@ -19,7 +25,7 @@ Win::Win(SDL_Renderer* renderer) {
     if (!font) {
         SDL_Log("Erreur chargement police: %s", SDL_GetError());
     }
-    textSurface = TTF_RenderText_Solid(font, "Exit", 4, textColor);
+    textSurface = TTF_RenderText_Solid(font, "continue", 9, textColor);
     textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
     SDL_DestroySurface(textSurface);
     if (!textTexture) {
@@ -54,6 +60,15 @@ void Win::Press(SDL_Renderer* _renderer) {
         SDL_GetTextureSize(textTexture, &tw, &th);
         SDL_FRect textRect = {buttonRect.x + 20, buttonRect.y + 5, (float)tw, (float)th};
         SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+    }
+}
+
+void Win::ChangeLevel(SDL_Renderer* renderer) {
+    if (texture) {
+        float tw, th;
+        SDL_GetTextureSize(texture, &tw, &th);
+        SDL_FRect textRect = {465, 400, (float)tw, (float)th};
+        SDL_RenderTexture(renderer, texture, nullptr, &textRect);
     }
 }
 
