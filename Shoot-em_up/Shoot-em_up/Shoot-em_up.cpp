@@ -16,7 +16,6 @@
 #include "ennemy.h"
 #include "menu.h"
 
-
 void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots, 
     std::vector<Ennemy*>& ennemies, Ship& ship, float now, Score* score, bool& isGameOver) {
     shoots.erase(
@@ -64,7 +63,7 @@ void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
                     return true; 
                 }
                 if (e->hp <= 0) {
-                    score->UpdateScore();
+                    score->UpdateScore(renderer);
                     delete e;
                     return true;
                 }
@@ -73,6 +72,9 @@ void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
         ),
         ennemies.end()
     );
+    if (ennemies.empty()) {
+
+    }
 
     float shipx = ship.pos_x;
     float shipy = ship.pos_y;
