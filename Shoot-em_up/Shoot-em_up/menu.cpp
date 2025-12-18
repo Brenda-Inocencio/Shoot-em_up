@@ -1,9 +1,5 @@
 #include "menu.h"
-#include "exit.h"
-#include "start.h"
-#include "pause.h"
-#include "play.h"
-#include "gameover.h"
+#include "button.h"
 
 Menu::Menu() {
 }
@@ -20,4 +16,8 @@ void Menu::MenuPauseRenderer(SDL_Renderer* renderer, Button* pause, Button* play
 
 void Menu::MenuGameOverRenderer(SDL_Renderer* renderer, Button* gameOver) {
     gameOver->Render(renderer);
+}
+
+void Menu::MenuWinRenderer(SDL_Renderer* renderer, Button* win, Button* play) {
+    win->Render(renderer);
 }

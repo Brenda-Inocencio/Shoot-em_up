@@ -143,6 +143,7 @@
     <ClCompile Include="button.cpp" />
     <ClCompile Include="ennemy.cpp" />
     <ClCompile Include="exit.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="gameover.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="move.cpp" />
@@ -154,12 +155,14 @@
     <ClCompile Include="Shoot-em_up.cpp" />
     <ClCompile Include="shoot.cpp" />
     <ClCompile Include="start.cpp" />
+    <ClCompile Include="win.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="background.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="ennemy.h" />
     <ClInclude Include="exit.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="gameover.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="move.h" />
@@ -170,6 +173,7 @@
     <ClInclude Include="ship.h" />
     <ClInclude Include="shoot.h" />
     <ClInclude Include="start.h" />
+    <ClInclude Include="win.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

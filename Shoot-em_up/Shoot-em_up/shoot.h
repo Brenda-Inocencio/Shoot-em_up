@@ -8,6 +8,8 @@ class Ship;
 
 class Shoot {
 public:
+	float prevtime;
+	bool isShoot;
 	float pos_x;
 	float pos_y;
 	SDL_FRect rect;

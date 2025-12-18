@@ -4,7 +4,7 @@
 
 GameOver::GameOver(SDL_Renderer* renderer) {
     TTF_Font* gameOverFont = TTF_OpenFont("OpenSans-VariableFont_wdth,wght.ttf", 28);
-    SDL_Color textColor = {255, 255, 255, 255};
+    SDL_Color textColor = { 255, 255, 255, 255 };
     if (!gameOverFont) {
         SDL_Log("Erreur chargement police: %s", SDL_GetError());
     }
@@ -28,31 +28,31 @@ GameOver::GameOver(SDL_Renderer* renderer) {
 }
 
 void GameOver::Render(SDL_Renderer* _renderer) {
-    buttonRect = {475, 600 , 100, 40};
+    buttonRect = { 475, 600 , 100, 40 };
     SDL_SetRenderDrawColor(_renderer, 150, 0, 0, 200);
     SDL_RenderFillRect(_renderer, &buttonRect);
     if (gameOverTexture) {
         float tw, th;
         SDL_GetTextureSize(gameOverTexture, &tw, &th);
-        SDL_FRect textRect = {475, 300, (float)tw, (float)th};
+        SDL_FRect textRect = { 475, 300, (float)tw, (float)th };
         SDL_RenderTexture(_renderer, gameOverTexture, nullptr, &textRect);
     }
     if (textTexture) {
         float tw, th;
         SDL_GetTextureSize(textTexture, &tw, &th);
-        SDL_FRect textRect = {buttonRect.x + 20, buttonRect.y + 5, (float)tw, (float)th};
+        SDL_FRect textRect = { buttonRect.x + 20, buttonRect.y + 5, (float)tw, (float)th };
         SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
     }
 }
 
 void GameOver::Press(SDL_Renderer* _renderer) {
-    buttonRect = {475, 600 , 100, 40};
+    buttonRect = { 475, 600 , 100, 40 };
     SDL_SetRenderDrawColor(_renderer, 100, 0, 0, 255);
     SDL_RenderFillRect(_renderer, &buttonRect);
     if (textTexture) {
         float tw, th;
         SDL_GetTextureSize(textTexture, &tw, &th);
-        SDL_FRect textRect = {buttonRect.x + 20, buttonRect.y + 5, (float)tw, (float)th};
+        SDL_FRect textRect = { buttonRect.x + 20, buttonRect.y + 5, (float)tw, (float)th };
         SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
     }
 }
