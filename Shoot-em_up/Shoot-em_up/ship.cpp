@@ -23,12 +23,11 @@ Ship::Ship(SDL_Renderer* _renderer) {
 		SDL_Log("Erreur chargement police: %s", SDL_GetError());
 	}
 	SDL_Color text_color = {255, 255, 255, 255};
-	textHeartSurface = TTF_RenderText_Solid(font, std::to_string(life).c_str(), 6, text_color);
+	textHeartSurface = TTF_RenderText_Solid(font, std::to_string(life).c_str(), 1, text_color);
 	textHeartTexture = SDL_CreateTextureFromSurface(_renderer, textHeartSurface);
 }
 
 Ship::~Ship() {
-	TTF_CloseFont(font);
 	SDL_DestroyTexture(m_ship);
 	SDL_DestroyTexture(heart);
 	SDL_DestroyTexture(textHeartTexture);
@@ -65,7 +64,6 @@ void Ship::Updatehp(SDL_Renderer* _renderer, float now) {
 		SDL_Color text_color = {255, 255, 255, 255};
 		textHeartSurface = TTF_RenderText_Solid(font, std::to_string(life).c_str(), 6, text_color);
 		textHeartTexture = SDL_CreateTextureFromSurface(_renderer, textHeartSurface);
-		SDL_DestroySurface(textHeartSurface);
 	}
 
 	if (!isVulnerable)
