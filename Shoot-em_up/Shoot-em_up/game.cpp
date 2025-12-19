@@ -104,9 +104,6 @@ void Game::Update(float dt, Ship& ship, std::vector<Shoot*>& shoots, Niveau* niv
     if (gameTime - shootCooldown >= 0.25f) {
         canShoot = true;
     }
-    if (canShoot) {
-        shootCooldown = gameTime;
-    }
     for (Ennemy* e : niveau->ennemies) {
         e->Update(gameTime, dt);
     }
