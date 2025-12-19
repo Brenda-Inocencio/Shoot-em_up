@@ -14,7 +14,6 @@ class Right;
 
 class Game {
 public:
-	Game();
 	void Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
 		std::vector<Ennemy*>& ennemies, Ship& ship, float now, Score* score, bool& isGameOver,
 		bool& isWin);
@@ -24,4 +23,3 @@ public:
 		Right& right, Left& left, Down& down, bool isUp, bool isRight, bool isLeft, bool isDown,
 		float gameTime, float& shootCooldown, bool& canShoot);
 };
-
