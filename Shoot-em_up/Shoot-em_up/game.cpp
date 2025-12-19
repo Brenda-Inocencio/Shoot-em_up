@@ -1,5 +1,4 @@
 #include "game.h"
-#include <iostream>
 #include <vector>
 #include "score.h"
 #include "ship.h"
@@ -7,10 +6,6 @@
 #include "move.h"
 #include "niveau.h"
 #include "ennemy.h"
-
-Game::Game() {
-
-}
 
 void Game::Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
     std::vector<Ennemy*>& ennemies, Ship& ship, float gameTime, Score* score, bool& isGameOver,
@@ -84,7 +79,7 @@ void Game::Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
             shipy >= e->pos_y && shipy <= e->pos_y + 68 ||
             e->pos_x + 72 >= shipx && e->pos_x + 72 <= shipx + 80 &&
             shipy >= e->pos_y && shipy <= e->pos_y + 68) {
-            ship.Updatehp(gameTime);
+            ship.Updatehp(renderer, gameTime);
             if (ship.life <= 0) {
                 isGameOver = true;
             }

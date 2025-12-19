@@ -14,7 +14,6 @@
 #include "win.h"
 #include "move.h"
 #include "niveau.h"
-#include "ennemy.h"
 #include "menu.h"
 
 int main(int argc, char** argv) {
@@ -25,7 +24,7 @@ int main(int argc, char** argv) {
     if (!SDL_Init(SDL_INIT_VIDEO))
         return 1;
 
-    if (!SDL_CreateWindowAndRenderer("Shoot'em up", 1024, 768, 0,
+    if (!SDL_CreateWindowAndRenderer("Magma Shooter", 1024, 768, 0,
         &window, &renderer))
         return 1;
 
@@ -50,7 +49,7 @@ int main(int argc, char** argv) {
     Button* pause = new Pause(renderer);
     Button* play = new Play(renderer);
     Button* gameOver = new GameOver(renderer);
-    Button* win = new Win(renderer);
+    Win* win = new Win(renderer);
     Score* score = new Score(renderer);
     Ship ship(renderer);
     std::vector<Shoot*> shoots;
@@ -107,14 +106,24 @@ int main(int argc, char** argv) {
                         }
                     }
                 }
-                else if (isWin && mx >= start->buttonRect.x && mx <= start->buttonRect.x + start->buttonRect.w &&
-                    my >= start->buttonRect.y && my <= start->buttonRect.y + start->buttonRect.h) {
-                    if (event.type != SDL_EVENT_MOUSE_BUTTON_UP) {
-                        start->Press(renderer);
-                        SDL_RenderPresent(renderer);
-                        isWin = false;
-                        isLvl1 = false;
-                        timeStart = now;
+                else if (isWin) {
+                    if (isLvl1 && mx >= start->buttonRect.x && mx <= start->buttonRect.x + start->buttonRect.w &&
+                        my >= start->buttonRect.y && my <= start->buttonRect.y + start->buttonRect.h) {
+                        if (event.type != SDL_EVENT_MOUSE_BUTTON_UP) {
+                            start->Press(renderer);
+                            SDL_RenderPresent(renderer);
+                            isWin = false;
+                            isLvl1 = false;
+                            timeStart = now;
+                        }
+                    }
+                    else if (!isLvl1 && mx >= exit->buttonRect.x && mx <= exit->buttonRect.x + exit->buttonRect.w &&
+                        my >= exit->buttonRect.y && my <= exit->buttonRect.y + exit->buttonRect.h) {
+                        if (event.type != SDL_EVENT_MOUSE_BUTTON_UP) {
+                            exit->Press(renderer);
+                            SDL_RenderPresent(renderer);
+                            keepGoing = false;
+                        }
                     }
                 }
                 else if (!gameStart) {
@@ -177,24 +186,27 @@ int main(int argc, char** argv) {
             }
         }
 
-        int window_w, window_h;
-        SDL_GetWindowSize(window, &window_w, &window_h);
         SDL_RenderClear(renderer);
-        bg.Render(renderer, window_w, window_h);
+        bg.Render(renderer);
 
         if (isWin) {
-            bg.Render(renderer, window_w, window_h);
-            menu.MenuWinRenderer(renderer, win, play);
+            bg.Render(renderer);
+            if (isLvl1) {
+                menu.MenuNextLevelRenderer(renderer, win, play);
+            }
+            else {
+                menu.MenuWinRenderer(renderer, win, exit);
+            }
             score->Render(renderer);
         }
         else if (isGameOver) {
-            bg.Render(renderer, window_w, window_h);
+            bg.Render(renderer);
             menu.MenuGameOverRenderer(renderer, gameOver);
             score->Render(renderer);
             gameStart = false;
         }
         else if (isPaused) {
-            bg.Render(renderer, window_w, window_h);
+            bg.Render(renderer);
             menu.MenuPauseRenderer(renderer, pause, play);
         }
         else if (gameStart) {
