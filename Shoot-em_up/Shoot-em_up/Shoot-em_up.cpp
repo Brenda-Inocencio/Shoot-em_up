@@ -115,6 +115,8 @@ int main(int argc, char** argv) {
                             isWin = false;
                             isLvl1 = false;
                             timeStart = now;
+                            gameTime = now - timeStart;
+                            shootCooldown = gameTime;
                         }
                     }
                     else if (!isLvl1 && mx >= exit->buttonRect.x && mx <= exit->buttonRect.x + exit->buttonRect.w &&
@@ -164,6 +166,7 @@ int main(int argc, char** argv) {
                         Shoot* shoot = new Shoot(renderer, ship);
                         shoots.push_back(shoot);
                         canShoot = false;
+                        shootCooldown = gameTime;
                     }
                 }
                 if (event.key.key == SDLK_ESCAPE) {
