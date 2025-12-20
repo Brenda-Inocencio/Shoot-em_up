@@ -14,7 +14,7 @@ void Game::Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
         std::remove_if(
             shoots.begin(), shoots.end(), [&](Shoot* s) {
 
-                // projectile hors écran
+                // projectile hors Ã©cran
                 float sx = s->pos_x;
                 float sy = s->pos_y;
                 if (sy < 0) {
@@ -96,7 +96,7 @@ void Game::Collisions(SDL_Renderer* renderer, std::vector<Shoot*>& shoots,
     );
 
     std::vector<Ennemy*> toAdd;
-    //vérifie si l'ennemi meurt et le detruit si c est le cas
+    //vÃ©rifie si l'ennemi meurt et le detruit si c est le cas
     ennemies.erase(
         std::remove_if(
             ennemies.begin(), ennemies.end(), [&](Ennemy* e) {
