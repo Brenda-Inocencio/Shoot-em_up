@@ -33,7 +33,7 @@
     <ClCompile Include="ennemy.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="niveau.cpp">
+    <ClCompile Include="level.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="ship.cpp">
@@ -89,7 +89,7 @@
     <ClInclude Include="ennemy.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="niveau.h">
+    <ClInclude Include="level.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="ship.h">

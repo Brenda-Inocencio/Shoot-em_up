@@ -147,7 +147,7 @@
     <ClCompile Include="gameover.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="move.cpp" />
-    <ClCompile Include="niveau.cpp" />
+    <ClCompile Include="level.cpp" />
     <ClCompile Include="pause.cpp" />
     <ClCompile Include="play.cpp" />
     <ClCompile Include="score.cpp" />
@@ -166,7 +166,7 @@
     <ClInclude Include="gameover.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="move.h" />
-    <ClInclude Include="niveau.h" />
+    <ClInclude Include="level.h" />
     <ClInclude Include="pause.h" />
     <ClInclude Include="play.h" />
     <ClInclude Include="score.h" />
