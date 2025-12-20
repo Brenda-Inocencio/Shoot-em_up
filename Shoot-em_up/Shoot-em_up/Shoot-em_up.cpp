@@ -13,7 +13,7 @@
 #include "gameover.h"
 #include "win.h"
 #include "move.h"
-#include "niveau.h"
+#include "level.h"
 #include "menu.h"
 
 int main(int argc, char** argv) {
@@ -40,10 +40,10 @@ int main(int argc, char** argv) {
         SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
     Game game;
-    Niveau* niveau_1 = new Niveau;
-    niveau_1->CreateEnnemy("Niveau_1.txt", renderer);
-    Niveau* niveau_2 = new Niveau;
-    niveau_2->CreateEnnemy("Niveau_2.txt", renderer);
+    Level* level_1 = new Level;
+    level_1->CreateEnnemy("Niveau_1.txt", renderer);
+    Level* level_2 = new Level;
+    level_2->CreateEnnemy("Niveau_2.txt", renderer);
     Button* exit = new Exit(renderer);
     Button* start = new Start(renderer);
     Button* pause = new Pause(renderer);
@@ -212,18 +212,18 @@ int main(int argc, char** argv) {
         else if (gameStart) {
             gameTime = now - timeStart;
             if (isLvl1) {
-                game.Update(dt, ship, shoots, niveau_1, up, right, left, down, isUp,
+                game.Update(dt, ship, shoots, level_1, up, right, left, down, isUp,
                     isRight, isLeft, isDown, gameTime, shootCooldown, canShoot);
-                game.Collisions(renderer, shoots, niveau_1->ennemies, ship, gameTime, score,
+                game.Collisions(renderer, shoots, level_1->ennemies, ship, gameTime, score,
                     isGameOver, isWin);
-                game.GameRenderer(renderer, ship, shoots, niveau_1);
+                game.GameRenderer(renderer, ship, shoots, *level_1);
             }
             else {
-                game.Update(dt, ship, shoots, niveau_2, up, right, left, down, isUp,
+                game.Update(dt, ship, shoots, level_2, up, right, left, down, isUp,
                     isRight, isLeft, isDown, gameTime, shootCooldown, canShoot);
-                game.Collisions(renderer, shoots, niveau_2->ennemies, ship, gameTime, score,
+                game.Collisions(renderer, shoots, level_2->ennemies, ship, gameTime, score,
                     isGameOver, isWin);
-                game.GameRenderer(renderer, ship, shoots, niveau_2);
+                game.GameRenderer(renderer, ship, shoots, *level_2);
             }
         }
         else {
@@ -242,8 +242,8 @@ int main(int argc, char** argv) {
     delete pause; pause = nullptr;
     delete play; play = nullptr;
     delete score; score = nullptr;
-    delete niveau_1; niveau_1 = nullptr;
-    delete niveau_2; niveau_2 = nullptr;
+    delete level_1; level_1 = nullptr;
+    delete level_2; level_2 = nullptr;
     shoots.clear();
     return 0;
 }

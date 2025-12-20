@@ -10,6 +10,7 @@ Ennemy::Ennemy(float _timer, int _height, float _speed, int _hp, SDL_Renderer* _
 	height = _height;
 	speed = _speed;
 	hp = _hp;
+	defaultHp = _hp;
 	pos_x = GetRandomNumber(0, 944);
 	pos_y = 0;
 	rect = {pos_x, pos_y, 80, 80};
@@ -35,13 +36,55 @@ Ennemy::Ennemy(float _timer, int _height, float _speed, int _hp, SDL_Renderer* _
 void Ennemy::Render(SDL_Renderer* _renderer) {
 	if (meteorite) {
 		if (isActive)  {
-			SDL_FRect dst = {pos_x, pos_y, 80.0f, 80.0f};
-			SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
-			if (textTexture) {
-				float tw, th;
-				SDL_GetTextureSize(textTexture, &tw, &th);
-				SDL_FRect textRect = {pos_x + 30, pos_y + 30, (float)tw, (float)th};
-				SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+			if (height == 1) {
+				SDL_FRect dst = {pos_x, pos_y, 40.0f, 40.0f};
+				SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
+				if (textTexture) {
+					float tw, th;
+					SDL_GetTextureSize(textTexture, &tw, &th);
+					SDL_FRect textRect = {pos_x + 15, pos_y + 15, (float)tw, (float)th};
+					SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+				}
+			}
+			else if (height == 2) {
+				SDL_FRect dst = {pos_x, pos_y, 60.0f, 60.0f};
+				SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
+				if (textTexture) {
+					float tw, th;
+					SDL_GetTextureSize(textTexture, &tw, &th);
+					SDL_FRect textRect = {pos_x + 22, pos_y + 22, (float)tw, (float)th};
+					SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+				}
+			}
+			else if (height == 3) {
+				SDL_FRect dst = {pos_x, pos_y, 80.0f, 80.0f};
+				SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
+				if (textTexture) {
+					float tw, th;
+					SDL_GetTextureSize(textTexture, &tw, &th);
+					SDL_FRect textRect = {pos_x + 30, pos_y + 30, (float)tw, (float)th};
+					SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+				}
+			}
+			else if (height == 4) {
+				SDL_FRect dst = {pos_x, pos_y, 100.0f, 100.0f};
+				SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
+				if (textTexture) {
+					float tw, th;
+					SDL_GetTextureSize(textTexture, &tw, &th);
+					SDL_FRect textRect = {pos_x + 37, pos_y + 37, (float)tw, (float)th};
+					SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+				}
+			}
+			else if (height == 5) {
+				SDL_FRect dst = {pos_x, pos_y, 120.0f, 120.0f};
+				SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
+				if (textTexture) {
+					float tw, th;
+					SDL_GetTextureSize(textTexture, &tw, &th);
+					SDL_FRect textRect = {pos_x + 45, pos_y + 45, (float)tw, (float)th};
+					SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+				}
 			}
 		}
 	}
