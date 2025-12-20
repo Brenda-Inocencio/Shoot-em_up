@@ -22,7 +22,6 @@ Ennemy::Ennemy(float _timer, int _height, float _speed, int _hp, SDL_Renderer* _
 	SDL_Color text_color = {0, 255, 0, 255};
 	textSurface = TTF_RenderText_Solid(font, std::to_string(hp).c_str(), 6, text_color);
 	textTexture = SDL_CreateTextureFromSurface(_renderer, textSurface);
-	SDL_DestroySurface(textSurface);
 
 	if (!textTexture) {
 		SDL_Log("Erreur rendu texte: %s", SDL_GetError());
@@ -125,4 +124,5 @@ Ennemy::~Ennemy() {
 	TTF_CloseFont(font);
 	SDL_DestroyTexture(meteorite);
 	SDL_DestroyTexture(textTexture);
+	SDL_DestroySurface(textSurface);
 }

@@ -250,4 +250,3 @@ int main(int argc, char** argv) {
     shoots.clear();
     return 0;
 }
-
