@@ -1,4 +1,3 @@
-
 #pragma once
 #include "SDL3/SDL.h"
 
@@ -20,6 +19,7 @@ public:
 	int height;
 	float speed;
 	int hp;
+	int defaultHp;
 	float pos_x;
 	float pos_y;
 	Ennemy(float timer, int _height, float _speed, int _hp, SDL_Renderer* _renderer);
