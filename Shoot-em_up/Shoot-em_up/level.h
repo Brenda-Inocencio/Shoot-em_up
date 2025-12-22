@@ -3,6 +3,8 @@
 #include <vector>
 
 struct SDL_Renderer;
+struct string;
+struct vector;
 class Ennemy;
 
 class Level {
