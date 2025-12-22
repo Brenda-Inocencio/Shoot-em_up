@@ -10,18 +10,18 @@ Ennemy::Ennemy(float _timer, int _height, float _speed, int _hp, SDL_Renderer* _
 	height = _height;
 	speed = _speed;
 	hp = _hp;
+	defaultHp = _hp;
 	pos_x = GetRandomNumber(0, 944);
 	pos_y = 0;
-	rect = {pos_x, pos_y, 80, 80};
+	rect = { pos_x, pos_y, 80, 80 };
 
 	font = TTF_OpenFont("OpenSans-VariableFont_wdth,wght.ttf", 12);
 	if (!font) {
 		SDL_Log("Erreur chargement police: %s", SDL_GetError());
 	}
-	SDL_Color text_color = {0, 255, 0, 255};
+	SDL_Color text_color = { 0, 255, 0, 255 };
 	textSurface = TTF_RenderText_Solid(font, std::to_string(hp).c_str(), 6, text_color);
 	textTexture = SDL_CreateTextureFromSurface(_renderer, textSurface);
-	SDL_DestroySurface(textSurface);
 
 	if (!textTexture) {
 		SDL_Log("Erreur rendu texte: %s", SDL_GetError());
@@ -34,14 +34,56 @@ Ennemy::Ennemy(float _timer, int _height, float _speed, int _hp, SDL_Renderer* _
 
 void Ennemy::Render(SDL_Renderer* _renderer) {
 	if (meteorite) {
-		if (isActive)  {
-			SDL_FRect dst = {pos_x, pos_y, 80.0f, 80.0f};
-			SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
-			if (textTexture) {
-				float tw, th;
-				SDL_GetTextureSize(textTexture, &tw, &th);
-				SDL_FRect textRect = {pos_x + 30, pos_y + 30, (float)tw, (float)th};
-				SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+		if (isActive) {
+			if (height == 1) {
+				SDL_FRect dst = { pos_x, pos_y, 40.0f, 40.0f };
+				SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
+				if (textTexture) {
+					float tw, th;
+					SDL_GetTextureSize(textTexture, &tw, &th);
+					SDL_FRect textRect = { pos_x + 15, pos_y + 15, (float)tw, (float)th };
+					SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+				}
+			}
+			else if (height == 2) {
+				SDL_FRect dst = { pos_x, pos_y, 60.0f, 60.0f };
+				SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
+				if (textTexture) {
+					float tw, th;
+					SDL_GetTextureSize(textTexture, &tw, &th);
+					SDL_FRect textRect = { pos_x + 22, pos_y + 22, (float)tw, (float)th };
+					SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+				}
+			}
+			else if (height == 3) {
+				SDL_FRect dst = { pos_x, pos_y, 80.0f, 80.0f };
+				SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
+				if (textTexture) {
+					float tw, th;
+					SDL_GetTextureSize(textTexture, &tw, &th);
+					SDL_FRect textRect = { pos_x + 30, pos_y + 30, (float)tw, (float)th };
+					SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+				}
+			}
+			else if (height == 4) {
+				SDL_FRect dst = { pos_x, pos_y, 100.0f, 100.0f };
+				SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
+				if (textTexture) {
+					float tw, th;
+					SDL_GetTextureSize(textTexture, &tw, &th);
+					SDL_FRect textRect = { pos_x + 37, pos_y + 37, (float)tw, (float)th };
+					SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+				}
+			}
+			else if (height == 5) {
+				SDL_FRect dst = { pos_x, pos_y, 120.0f, 120.0f };
+				SDL_RenderTexture(_renderer, meteorite, nullptr, &dst);
+				if (textTexture) {
+					float tw, th;
+					SDL_GetTextureSize(textTexture, &tw, &th);
+					SDL_FRect textRect = { pos_x + 45, pos_y + 45, (float)tw, (float)th };
+					SDL_RenderTexture(_renderer, textTexture, nullptr, &textRect);
+				}
 			}
 		}
 	}
@@ -61,7 +103,7 @@ void Ennemy::Update(float now, float dt) {
 
 	if (!isActive)
 		return;
-	
+
 	pos_y += 40 * speed * dt;
 
 	rect.x = pos_x;
@@ -72,7 +114,7 @@ void Ennemy::Update(float now, float dt) {
 
 void Ennemy::UpdateText(SDL_Renderer* _renderer) {
 	if (textTexture) SDL_DestroyTexture(textTexture);
-	SDL_Color text_color = {0, 255, 0, 255};
+	SDL_Color text_color = { 0, 255, 0, 255 };
 	textSurface = TTF_RenderText_Solid(font, std::to_string(hp).c_str(), 6, text_color);
 	textTexture = SDL_CreateTextureFromSurface(_renderer, textSurface);
 	SDL_DestroySurface(textSurface);
@@ -82,4 +124,5 @@ Ennemy::~Ennemy() {
 	TTF_CloseFont(font);
 	SDL_DestroyTexture(meteorite);
 	SDL_DestroyTexture(textTexture);
+	SDL_DestroySurface(textSurface);
 }
