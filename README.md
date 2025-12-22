@@ -1,3 +1,5 @@
+Franck Billebaut and Brenda Inocencio
+
 This program is a Shoot’em up made in C++ on Visual Studio 2026.
 
 You can move your ship with “zqsd” and shoot with “space bar”.
